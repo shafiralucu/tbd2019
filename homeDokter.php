@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<?php 
+    session_start();
+
+?><!DOCTYPE html>
 <html>
     <head>
             <title>Home - Diagnosis Sederhana</title>
@@ -107,7 +110,7 @@
                 
                   <div class="w3-container"><br>
                     <h2>
-                        Welcome, Dr. Firzan! (firzanviolant@gmail.com)
+                        Welcome, <?php echo $_SESSION['email'] ?>
                     </h2>
                     <div class = "w3-container w3-display-middle" id = "boxCekDiagnosis" style = "width: 30%; margin-top: 3%;">
                         <center style = "font-family: font2;">
@@ -116,12 +119,13 @@
                                 <p> Plug in your symptoms on our app and we'll give you a list of possible conditions. You can then discuss your results directly with a Doctor.
                                         Start with filling your patient's personal data!</p>
                                         <form action = "input_pasien.php">
-                                        <button type="submit" class="btn btn-primary w3-theme-d4">Start</button>
+                   <button type="submit" class="btn btn-primary" name="submit">Submit</button>
         </form>
                                 
                         </center> 
                     </div>
                   </div>
+				  
 
                   <div class="footer">
                     <p style = "margin-top: 1%;">  © 2019 Diagnosis Sederhana - Tugas Akhir TBD</p>
@@ -131,3 +135,23 @@
         </script>
     </body>
 </html>
+<?php
+include("koneksi.php");
+
+$query= "SELECT * FROM pemeriksaan";
+
+	if(isSet($_GET['submit']))
+	{
+		$today = date("d/m/Y");
+
+		
+			$query = "INSERT INTO pemeriksaan(idPemeriksaan,idDokter,waktu,idPasien,idGejala) VALUES('','','$today','','')";
+			$res = $conn->query($query);
+			
+			$query = "SELECT * FROM pemeriksaan";
+			echo "<script>alert('data berhasil disimpan');
+		    document.location.href='tandaBahayaUmum.php'</script>\n";
+		
+		}
+	
+?>

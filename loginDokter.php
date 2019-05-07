@@ -1,5 +1,28 @@
 <?php
-session_start();
+include("koneksi.php");
+
+if(isset($_POST['submit']))
+{
+	$user_email=$_POST['email'];
+	$user_password=$_POST['pswd'];
+	
+	
+	$query= "SELECT email, password FROM dokter WHERE email='$user_email' AND password='$user_password'";
+	
+	$res = $conn->query($query);
+	if(mysqli_num_rows($res))
+	{
+		//echo "<script>window.open('halamanUtamaDokter.php','_self')</script>";
+	
+		echo "<script>alert('Login Success');
+		document.location.href='homeDokter.php'</script>\n";
+		$_SESSION['email'] = $user_email;
+	}
+	else
+	{	
+		echo "<script>alert('Wrong E-mail or Password')</script>";
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,31 +101,5 @@ session_start();
 </body>
 </html>
 
-<?php
-include("koneksi.php");
-if(isset($_POST['submit']))
-{
-	$user_email=$_POST['email'];
-	$user_password=$_POST['pswd'];
-	//$query = " SELECT * FROM dokter";
-	//$query = " INSERT INTO buku(kd_buku,judul_buku,pengarang,jenis_buku,penerbit) VALUES ('$kode','$judul','$pengarang','$jenis','$penerbit') ";
-	//$res = $conn->query($query);
-	
-	$query= "SELECT email, password FROM dokter WHERE email='$user_email' AND password='$user_password'";
-	//$run= sqlsrv_connect($query,$connectionInfo);
-	$res = $conn->query($query);
-	if(mysqli_num_rows($res))
-	{
-		//echo "<script>window.open('halamanUtamaDokter.php','_self')</script>";
-	
-		echo "<script>alert('data berhasil disimpan');
-		document.location.href='homeDokter.php'</script>\n";
-		$_SESSION['email']=$user_email;
-	}
-	else
-	{	
-		echo "<script>alert('email/password salah!!')</script>";
-	}
-}
-?>
+
 

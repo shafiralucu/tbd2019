@@ -17,11 +17,11 @@ $query= "SELECT * FROM pasien";
 			$res = $conn->query($query);
 			//$run=sqlsrv_connect($query,$connectionInfo);
 			$query = "SELECT * FROM pasien";
-			echo "<script>alert('data berhasil disimpan');
-			document.location.href='loginDokter.php'</script>\n";
+			echo "<script>alert('Patient details added to database!');
+			document.location.href='tandaBahayaUmum.php'</script>\n";
 		} else {
-			echo "<script>alert('data gagal disimpan');
-			document.location.href='loginDokter.php'</script>\n";
+			echo "<script>alert('Failed to insert to database');
+			document.location.href='input_pasien.php'</script>\n";
 		}
 	}
 ?>
