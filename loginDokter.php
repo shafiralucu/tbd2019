@@ -1,22 +1,33 @@
 <?php
-start_session();
+session_start();
 include("koneksi.php");
 
 
 if(isset($_POST['submit']))
 {
-	$user_email=$_POST['email'];
-  $user_password=$_POST['pswd'];
-  $_SESSION['email'] = $user_email;
+  
+	$user_email = $_POST['email'];
+  $user_password = $_POST['pswd'];
 	
 	
-	$query= "SELECT email, password FROM dokter WHERE email='$user_email' AND password='$user_password'";
-	
-	$res = $conn->query($query);
+  $query= "SELECT email, password FROM dokter WHERE email='$user_email' AND password='$user_password'";
+  // $query2 = "SELECT namaDokter FROM dokter WHERE email='$user_email' AND password='$user_password'";
+  
+  $res = $conn->query($query);
+  // $res2 = $conn->query($query2);
+
+  // $namaDokter="";
+  // while ($row=mysqli_fetch_row($res2))
+  // {
+  //     $namaDokter = $row[0];
+  // }
+
+
 	if(mysqli_num_rows($res))
 	{
 		//echo "<script>window.open('halamanUtamaDokter.php','_self')</script>";
     $_SESSION['email'] = $user_email;
+    // $_SESSION['nama'] = $namaDokter;
 		echo "<script>alert('Login Success');
 		document.location.href='homeDokter.php'</script>\n";
 		

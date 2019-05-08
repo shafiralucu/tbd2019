@@ -1,7 +1,9 @@
 <?php 
     session_start();
+    $emailDokter = $_SESSION['email'];
 
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html>
     <head>
             <title>Home - Diagnosis Sederhana</title>
@@ -110,7 +112,7 @@
                 
                   <div class="w3-container"><br>
                     <h2>
-                        Welcome, <?php echo $_SESSION['email'] ?>
+                        Welcome, <?php $_SESSION['namaDokter']; ?> <?php echo $_SESSION['email']; ?>
                     </h2>
                     <div class = "w3-container w3-display-middle" id = "boxCekDiagnosis" style = "width: 30%; margin-top: 3%;">
                         <center style = "font-family: font2;">

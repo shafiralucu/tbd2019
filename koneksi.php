@@ -4,4 +4,5 @@
 	if($conn -> connect_errno){
 			echo "Failed to connect.";
 	}
+
 ?>

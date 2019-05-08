@@ -1,4 +1,11 @@
-
+<?php
+session_start(); 
+include("koneksi.php");
+$emailDok = $_SESSION['email'];
+$queryGet = "SELECT namaDokter FROM dokter WHERE email = '$emailDok'";
+$res = $conn->query($queryGet);
+$row = mysqli_fetch_row($res); 
+$namaDokter = $row[0]; ?>
 <html>
 
 <head>
@@ -257,7 +264,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
             </li>
-            <li class="nav-item" style="margin-left: 1450px;">
+            <li class="nav-item" style="margin-left: 1650px;">
                 <a class="nav-link" href="#">Logout</a>
             </li>
         </ul>
@@ -265,44 +272,22 @@
 
     <div class="w3-container"><br>
         <h2>
-            Welcome, Dr. Firzan! (firzanviolant@gmail.com)
+            Welcome, Dr. <?php echo $namaDokter; ?> (<?php echo $_SESSION['email']; ?>)
         </h2>
 
         <!-- isi data pasien -->
-		<form method="GET" action="tandaBahayaUmum.php">
+		<form method="GET" action="getTandaBahayaUmum.php">
         <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%;">
             <center style="font-family: font2;">
-                <h1 style = "text-align: center;">Tanda Bahaya Umum</h1>
-                <hr>
-                <label class="container" style="font-family: font2; text-align: left;">Tidak bisa minum atau menyusui
-                        <input type="checkbox" name="satu" onclick="myFunction()">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;" >Biru (ala nosis)
-                        <input type="checkbox" name="b">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;" >Letargils atau tidak sadar
-                        <input type="checkbox" name="3">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;">Ujung tangan dan kaki dingin
-                        <input type="checkbox" name="5">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;">Kejang
-                        <input type="checkbox" name="6">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;">Memuntahkan semuanya
-                        <input type="checkbox" name="7">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;">Ada stridor
-                        <input type="checkbox" name="8">
-                    <span class="checkmark"></span>
-                </label>
-                <br>
+            <input type="checkbox" name="check_list[]" value="laptop">Tanda Bahaya Umum<br>
+            <input type="checkbox" name="check_list[]" value="microphone">Tidak bisa minum atau menyusui<br>
+            <input type="checkbox" name="check_list[]"value="proyektor">Biru (ala nosis)<br>
+            <input type="checkbox" name="check_list[]" value="radio">Letargils atau tidak sadar<br>
+            <input type="checkbox" name="check_list[]" value="speaker">Ujung tangan dan kaki dingin<br>
+            <input type="checkbox" name="check_list[]" value="whiteboard">Kejang<br>
+            <input type="checkbox" name="check_list[]" value="speaker">Ada stridor<br>
+            <input type="checkbox" name="check_list[]" value="whiteboard">Kejang<br>
+               
                 <br>
                 <button type="submit" name="simpan" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button>
             </center>
@@ -319,43 +304,43 @@
 </html>
 
 <?php
-include("koneksi.php");
-$query= "SELECT * FROM pemeriksaan";
+// include("koneksi.php");
+// $query= "SELECT * FROM pemeriksaan";
 
-	if(isSet($_GET['simpan']))
-	{
-		//$1   = $_GET['1'];
+// 	if(isSet($_GET['simpan']))
+// 	{
+// 		//$1   = $_GET['1'];
 		
-		//$2  = $_GET['2'];
+// 		//$2  = $_GET['2'];
 		
-		//$3  = $_GET['2'];
-		$tl     = $_GET['tl'];
+// 		//$3  = $_GET['2'];
+// 		$tl     = $_GET['tl'];
 
-		$notelp = $_GET['notelp'];
+// 		$notelp = $_GET['notelp'];
 		
 		
 
-		if (isSet($nama) && $nama != "" && isSet($alamat) && $alamat != "" && isSet($tl) && $tl != "" && isSet($notelp) && $notelp != "") {
-			$query = "INSERT INTO pasien(namaPasien,alamat,tanggalLahir,noTelp) VALUES ('$nama','$alamat','$tl','$notelp')";
-			//$query = "INSERT INTO pemeriksaan(idDokter,waktu,idPasien,idGejala) VALUES('$idDok','$idDate','%idPas','%cobain')"
-			$res = $conn->query($query);
-			//$run=sqlsrv_connect($query,$connectionInfo);
-			$query = "SELECT * FROM pasien";
-			echo "<script>alert('data berhasil disimpan');
-			document.location.href='loginDokter.php'</script>\n";
-		} else {
-			echo "<script>alert('data gagal disimpan');
-			document.location.href='loginDokter.php'</script>\n";
-		}
-	}
+// 		if (isSet($nama) && $nama != "" && isSet($alamat) && $alamat != "" && isSet($tl) && $tl != "" && isSet($notelp) && $notelp != "") {
+// 			$query = "INSERT INTO pasien(namaPasien,alamat,tanggalLahir,noTelp) VALUES ('$nama','$alamat','$tl','$notelp')";
+// 			//$query = "INSERT INTO pemeriksaan(idDokter,waktu,idPasien,idGejala) VALUES('$idDok','$idDate','%idPas','%cobain')"
+// 			$res = $conn->query($query);
+// 			//$run=sqlsrv_connect($query,$connectionInfo);
+// 			$query = "SELECT * FROM pasien";
+// 			echo "<script>alert('data berhasil disimpan');
+// 			document.location.href='loginDokter.php'</script>\n";
+// 		} else {
+// 			echo "<script>alert('data gagal disimpan');
+// 			document.location.href='loginDokter.php'</script>\n";
+// 		}
+// 	}
 ?>
 
 <script>
-function myFunction() {
-	$cobain1 = "SELECT idGejala FROM gejala WHERE namaGejala = '$1'"
-  var checkBox = document.getElementsByClassName("satu");
-  if (checkBox.checked == true){
-    $query = "INSERT INTO pemeriksaan(idDokter,waktu,idPasien,idGejala) VALUES('$idDok','$idDate','%idPas','%cobain1')"
-  }
-}
+// function myFunction() {
+// 	$cobain1 = "SELECT idGejala FROM gejala WHERE namaGejala = '$1'"
+//   var checkBox = document.getElementsByClassName("satu");
+//   if (checkBox.checked == true){
+//     $query = "INSERT INTO pemeriksaan(idDokter,waktu,idPasien,idGejala) VALUES('$idDok','$idDate','%idPas','%cobain1')"
+//   }
+// }
 </script>
