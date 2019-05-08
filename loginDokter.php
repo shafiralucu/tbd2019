@@ -1,10 +1,13 @@
 <?php
+start_session();
 include("koneksi.php");
+
 
 if(isset($_POST['submit']))
 {
 	$user_email=$_POST['email'];
-	$user_password=$_POST['pswd'];
+  $user_password=$_POST['pswd'];
+  $_SESSION['email'] = $user_email;
 	
 	
 	$query= "SELECT email, password FROM dokter WHERE email='$user_email' AND password='$user_password'";
@@ -13,10 +16,10 @@ if(isset($_POST['submit']))
 	if(mysqli_num_rows($res))
 	{
 		//echo "<script>window.open('halamanUtamaDokter.php','_self')</script>";
-	
+    $_SESSION['email'] = $user_email;
 		echo "<script>alert('Login Success');
 		document.location.href='homeDokter.php'</script>\n";
-		$_SESSION['email'] = $user_email;
+		
 	}
 	else
 	{	
