@@ -279,14 +279,13 @@ $namaDokter = $row[0]; ?>
 		<form method="GET" action="getTandaBahayaUmum.php">
         <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%;">
             <center style="font-family: font2;">
-            <input type="checkbox" name="check_list[]" value="laptop">Tanda Bahaya Umum<br>
-            <input type="checkbox" name="check_list[]" value="microphone">Tidak bisa minum atau menyusui<br>
-            <input type="checkbox" name="check_list[]"value="proyektor">Biru (ala nosis)<br>
-            <input type="checkbox" name="check_list[]" value="radio">Letargils atau tidak sadar<br>
-            <input type="checkbox" name="check_list[]" value="speaker">Ujung tangan dan kaki dingin<br>
-            <input type="checkbox" name="check_list[]" value="whiteboard">Kejang<br>
-            <input type="checkbox" name="check_list[]" value="speaker">Ada stridor<br>
-            <input type="checkbox" name="check_list[]" value="whiteboard">Kejang<br>
+            <input type="checkbox" name="check_list[]" value="Tidak bisa minum atau menyusui">Tidak bisa minum atau menyusui<br>
+            <input type="checkbox" name="check_list[]" value="Biru (sianosis)">Biru (sianosis)<br>
+            <input type="checkbox" name="check_list[]" value="Letargis atau tidak sadar">Letargis atau tidak sadar<br>
+            <input type="checkbox" name="check_list[]" value="Ujung tangan dan kaki dingin">Ujung tangan dan kaki dingin<br>
+            <input type="checkbox" name="check_list[]" value="Kejang">Kejang<br>
+            <input type="checkbox" name="check_list[]" value="Memuntahkan semuanya">Memuntahkan semuanya<br>
+            <input type="checkbox" name="check_list[]" value="Ada stridor">Ada stridor<br>
                
                 <br>
                 <button type="submit" name="simpan" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button>

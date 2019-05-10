@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2019 at 03:58 PM
+-- Generation Time: May 10, 2019 at 03:51 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -72,33 +72,27 @@ CREATE TABLE `gejala` (
 
 INSERT INTO `gejala` (`idGejala`, `namaGejala`) VALUES
 (1, 'Tidak bisa minum atau menyusui'),
-(2, 'Biru (ala nosis)'),
-(3, 'Letargis atau tidak sadar'),
-(4, 'Ujung tangan dan kaki dingin'),
-(5, 'Kejang'),
-(6, 'Memuntahkan semuanya'),
-(7, 'Ada stridor'),
-(8, 'Memeriksa batuk atau sukar bernafas'),
+(2, 'Memuntahkan semua makanan dan / atau minuman'),
+(3, 'Pernah atau sedang mengalami kejang'),
+(4, 'Gelisah'),
+(5, 'Letargis atau tidak sadar'),
+(6, 'Ada stridor'),
+(7, 'Tampak biru (sianosis)'),
+(8, 'Ujung tangan dan kaki pucat dan dingin'),
 (9, 'Ada tarikan dinding dada kedalam'),
 (10, 'Saturasi oksigen < 90%'),
-(11, 'Lihat dan dengar adanya wheezing'),
-(12, 'Nafas cepat'),
-(13, 'Mata cekung'),
-(14, 'Tidak bisa minum atau malas minum'),
-(15, 'Cubitan kulit perut kembali sangat lambat'),
-(16, 'Cubitan kulit perut kembali lambat'),
-(17, 'Rewel atau mudah marah'),
-(18, 'Haus (minum dengan lahap)'),
-(19, 'Ada darah dalam tinja'),
-(20, 'Pembengkakan yang nyeri di belakang telinga'),
-(21, 'Nyeri telinga'),
-(22, 'Rasa penuh di telinga'),
-(23, 'Tampak cairan/nanah keluar dari telinga selama kurang dari 14 hari'),
-(24, 'Tampak cairan/nanah keluar dari telinga dan telah terjadi selama 14 hari atau lebih'),
-(25, 'Tidak ada nyeri telinga'),
-(26, 'Tidak ada nanah keluar dari telinga'),
-(27, 'Telapak tangan sangat pucat'),
-(28, 'Telapak tangan agak pucat');
+(11, 'Nafas cepat'),
+(12, 'Tidak ada tanda-tanda Pneumonia Berat maupun Pneumonia'),
+(13, 'Pembengkakan yang nyeri belakang telinga'),
+(14, 'Nyeri telinga'),
+(15, 'Rasa penuh di telinga'),
+(16, 'Tampak cairan/nanah keluar dari telinga selama kurang dari 14 hari'),
+(17, 'Tampak cairan/nanah keluar dari telinga dan telah terjadi selama 14 hari atau lebih\r\n'),
+(18, 'Tidak ada nyeri telinga'),
+(19, 'Tidak ada nanah keluar dari telinga'),
+(20, 'Telapak tangan sangat pucat'),
+(21, 'Telapak tangan agak pucat'),
+(22, 'Tidak ditemukan tanda kepucatan pada telapak tangan');
 
 -- --------------------------------------------------------
 
@@ -107,10 +101,55 @@ INSERT INTO `gejala` (`idGejala`, `namaGejala`) VALUES
 --
 
 CREATE TABLE `memiliki` (
-  `idMemiliki` int(11) NOT NULL,
   `idPenyakit` int(11) NOT NULL,
   `idTindakan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `memiliki`
+--
+
+INSERT INTO `memiliki` (`idPenyakit`, `idTindakan`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(2, 7),
+(2, 8),
+(2, 6),
+(3, 9),
+(3, 10),
+(3, 11),
+(3, 12),
+(3, 13),
+(3, 14),
+(4, 10),
+(4, 11),
+(4, 12),
+(4, 13),
+(4, 14),
+(5, 8),
+(5, 15),
+(5, 6),
+(6, 16),
+(6, 17),
+(6, 18),
+(6, 19),
+(7, 20),
+(7, 21),
+(7, 22),
+(8, 23),
+(9, 24),
+(9, 6),
+(10, 25),
+(10, 26),
+(10, 27),
+(10, 28),
+(10, 13),
+(10, 29),
+(11, 30);
 
 -- --------------------------------------------------------
 
@@ -144,7 +183,8 @@ CREATE TABLE `pasien` (
 
 INSERT INTO `pasien` (`idPasien`, `namaPasien`, `alamat`, `tanggalLahir`, `noTelp`) VALUES
 (1, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131'),
-(2, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131');
+(2, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131'),
+(3, 'Gio', 'Jl.OBC', '2017-01-01', '02174779');
 
 -- --------------------------------------------------------
 
@@ -187,19 +227,13 @@ INSERT INTO `penyakit` (`idPenyakit`, `namaPenyakit`) VALUES
 (2, 'Pneumonia Berat'),
 (3, 'Pneumonia'),
 (4, 'Batuk bukan Pneumonia'),
-(5, 'Diare dehidrasi berat'),
-(6, 'Diare dehidrasi ringan/sedang'),
-(7, 'Diare tanpa dehidrasi'),
-(8, 'Diare persisten berat'),
-(9, 'Diare persisten'),
-(10, 'Disentri'),
-(11, 'Mastoditis'),
-(12, 'Infeksi telinga akut'),
-(13, 'Infeksi telinga kronis'),
-(14, 'Tidak ada infeksi telinga'),
-(15, 'Anemia berat'),
-(16, 'Anemia'),
-(17, 'Tidak Anemia');
+(5, 'Mastoiditis'),
+(6, 'Infeksi telinga akut'),
+(7, 'Infeksi'),
+(8, 'Tidak ada infeksi telinga'),
+(9, 'Anemia Berat'),
+(10, 'Anemia'),
+(11, 'Tidak Anemia');
 
 -- --------------------------------------------------------
 
@@ -234,6 +268,34 @@ CREATE TABLE `terdiridari` (
   `idPenyakit` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `terdiridari`
+--
+
+INSERT INTO `terdiridari` (`idGejala`, `idPenyakit`) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+(6, 1),
+(7, 1),
+(8, 1),
+(9, 2),
+(10, 2),
+(11, 3),
+(12, 4),
+(13, 5),
+(14, 6),
+(15, 6),
+(16, 6),
+(17, 7),
+(18, 8),
+(19, 8),
+(20, 9),
+(21, 10),
+(22, 11);
+
 -- --------------------------------------------------------
 
 --
@@ -244,6 +306,42 @@ CREATE TABLE `tindakan` (
   `idTindakan` int(11) NOT NULL,
   `namaTindakan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tindakan`
+--
+
+INSERT INTO `tindakan` (`idTindakan`, `namaTindakan`) VALUES
+(1, 'Bila sedang kejang beri diazepam'),
+(2, 'Bila ada stridor pastikan tidak ada sumbatan jalan napas'),
+(3, 'Bila ada stridor, sianosis dan ujung tangan dan kaki pucat dan dingin berikan oksigen 3-5 liter/meni'),
+(4, 'Cegah agar gula darah tidak turun'),
+(5, 'Jaga anak tetap hangat'),
+(6, 'Rujuk Segera'),
+(7, 'Beri Oksigen maskimal 2-3 liter/menit dengan menggunakan nasal prong'),
+(8, 'Beri dosis pertama antibiotik yang sesuai'),
+(9, 'Beri amoksisilin 2X sehari selama 3 hari atau 5 hari'),
+(10, 'Beri pelega tenggorokan dan pereda batuk yang aman'),
+(11, 'Obati wheezing bila ada'),
+(12, 'Apabila batuk > 14 hari RUJUK untuk pemeriksaan lanjutan'),
+(13, 'Nasehati kapan kembali segera'),
+(14, 'Kunjungan ulang 2 hari'),
+(15, 'Beri dosis pertama parasetamol unutk mengatasi nyeri'),
+(16, 'Beri antibiotik yang sesuai selama 7 hari'),
+(17, 'Beri parasetamol untuk mengatasi nyeri'),
+(18, 'Keringkan telinga dengan bahan penyerap'),
+(19, 'Kunjungan ulang 5 hari'),
+(20, 'Keringkan telinga dengan bahan penyerap setelah dicuci dengan NaCl 0,9% atau H2O2 3%'),
+(21, 'Beri tetes telinga yang sesuai'),
+(22, 'Kunjungan ulang 5 hari'),
+(23, 'Tangani masala telinga yang ditemukan'),
+(24, 'Bila masih menyusu, teruskan pemberian ASI'),
+(25, 'Lakukan Penilaian Pemberian Makan pada anak. Bila ada masalah, beri konseling pemberian makan dan ku'),
+(26, 'Bila masih menyusu, teruskan pemberian ASI'),
+(27, 'Lakukan pemeriksaan tinja untuk deteksi kecacingan'),
+(28, 'Jika daerah Endemis Tinggi Malarian : periksa dan obati malaria terlebih dahulu jika positif'),
+(29, 'Kunjungan ulang 14 hari'),
+(30, 'Jika anak < 2 tahun, nilai pemberian makanan pada anak. Jika ada masalah pemberian makan, kunjungan ');
 
 --
 -- Indexes for dumped tables
@@ -265,7 +363,6 @@ ALTER TABLE `gejala`
 -- Indexes for table `memiliki`
 --
 ALTER TABLE `memiliki`
-  ADD PRIMARY KEY (`idMemiliki`),
   ADD KEY `fkpenyakit` (`idPenyakit`),
   ADD KEY `fktindakan` (`idTindakan`);
 
@@ -339,12 +436,6 @@ ALTER TABLE `gejala`
   MODIFY `idGejala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `memiliki`
---
-ALTER TABLE `memiliki`
-  MODIFY `idMemiliki` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `obat`
 --
 ALTER TABLE `obat`
@@ -354,7 +445,7 @@ ALTER TABLE `obat`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `idPasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idPasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pemeriksaan`
@@ -372,7 +463,7 @@ ALTER TABLE `penyakit`
 -- AUTO_INCREMENT for table `tindakan`
 --
 ALTER TABLE `tindakan`
-  MODIFY `idTindakan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idTindakan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Constraints for dumped tables
