@@ -11,23 +11,37 @@ if(isset($_POST['submit']))
 	
 	
   $query= "SELECT email, password FROM dokter WHERE email='$user_email' AND password='$user_password'";
-  // $query2 = "SELECT namaDokter FROM dokter WHERE email='$user_email' AND password='$user_password'";
-  
+  $query2 = "SELECT idDokter FROM dokter WHERE email='$user_email' AND password='$user_password'";
+  $query3 = "SELECT namaDokter FROM dokter WHERE email='$user_email' AND password='$user_password'";
   $res = $conn->query($query);
-  // $res2 = $conn->query($query2);
+  $res2 = $conn->query($query2);
+  $res3 = $conn->query($query3);
 
-  // $namaDokter="";
-  // while ($row=mysqli_fetch_row($res2))
-  // {
-  //     $namaDokter = $row[0];
-  // }
+  $idDokter = 0;
+  $namaDokter = "";
+
+  while ($row=mysqli_fetch_row($res2))
+   {
+       $idDokter = $row[0];
+  }
+
+  while ($row=mysqli_fetch_row($res3))
+  {
+      $namaDokter = $row[0];
+  }
+
+
+    $_SESSION['email'] = $user_email;
+    $_SESSION['idDokter'] = $idDokter;
+    $_SESSION['namaDokter'] = $namaDokter;
+
+
 
 
 	if(mysqli_num_rows($res))
 	{
 		//echo "<script>window.open('halamanUtamaDokter.php','_self')</script>";
-    $_SESSION['email'] = $user_email;
-    // $_SESSION['nama'] = $namaDokter;
+    
 		echo "<script>alert('Login Success');
 		document.location.href='homeDokter.php'</script>\n";
 		

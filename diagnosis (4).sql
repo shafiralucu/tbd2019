@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2019 at 03:51 PM
+-- Generation Time: May 15, 2019 at 02:03 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -26,8 +26,124 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `Contoh` ()  SELECT *
-FROM dokter$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `anemia` (`gejalaInput` VARCHAR(100), `idPemeriksaanInput` INT)  BEGIN
+        
+	 -- tabel untuk menampung gejala yang dipilih dr choice box --
+		CREATE TEMPORARY TABLE IF NOT EXISTS tblAnemia
+		(	gejala VARCHAR(50),
+			idPemeriksa INT
+        );
+        
+        -- insert gejala dr choice box ke temp table gejalaInput --
+        INSERT INTO tblAnemia (gejala, idPemeriksa) VALUES (gejalaInput, idPemeriksaanInput);
+        
+        -- masukkan idGejala, idPemeriksaan ke tabel tercatat--
+		INSERT INTO tercatat (idGejala, idPemeriksaan)
+        SELECT idGejala, idPemeriksa
+        FROM tblAnemia INNER JOIN gejala ON tblAnemia.gejala = gejala.namaGejala
+        WHERE tblAnemia.gejala = gejala.namaGejala;
+        
+         -- join tblGejala dengan tabel Gejala, terdiriDari(relasi gejala dgn penyakit), Penyakit
+        SELECT DISTINCT penyakit.namaPenyakit
+        FROM tblAnemia INNER JOIN gejala ON tblAnemia.gejala = gejala.namaGejala 
+        INNER JOIN terdiridari ON gejala.idGejala = terdiridari.idGejala 
+        INNER JOIN penyakit ON terdiridari.idPenyakit = penyakit.idPenyakit;
+        
+         DROP TEMPORARY TABLE tblAnemia;
+        
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `batuk` (`gejalaInput` VARCHAR(100), `idPemeriksaanInput` INT)  BEGIN
+		DECLARE jumlahGejala INT;
+ -- tabel untuk menampung gejala yang dipilih dr choice box --
+		CREATE TEMPORARY TABLE IF NOT EXISTS tblBatuk
+		(	gejala VARCHAR(50),
+			idPemeriksa INT
+        );
+        
+        
+        -- insert gejala dr choice box ke temp table gejalaInput --
+        INSERT INTO tblBatuk (gejala, idPemeriksa) VALUES (gejalaInput, idPemeriksaanInput);
+        
+		-- masukkan idGejala, idPemeriksaan ke tabel tercatat--
+		INSERT INTO tercatat (idGejala, idPemeriksaan)
+        SELECT idGejala, idPemeriksa
+        FROM tblBatuk INNER JOIN gejala ON tblBatuk.gejala = gejala.namaGejala;
+      
+        
+        -- join tabel tblTelinga dengan tabel gejala --
+		SELECT DISTINCT penyakit.namaPenyakit
+        FROM tblBatuk INNER JOIN gejala ON tblBatuk.gejala = gejala.namaGejala 
+        INNER JOIN terdiridari ON gejala.idGejala = terdiridari.idGejala 
+        INNER JOIN penyakit ON terdiridari.idPenyakit = penyakit.idPenyakit;
+        
+        DROP TEMPORARY TABLE tblBatuk;
+        
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tandaBahaya` (`gejalaInput` VARCHAR(100), `idPemeriksaanInput` INT)  BEGIN
+	 -- tabel untuk menampung gejala yang dipilih dr choice box --
+		CREATE TEMPORARY TABLE IF NOT EXISTS tblGejala
+		(	gejala VARCHAR(50),
+			idPemeriksa INT
+        );
+        
+        -- insert gejala dr choice box ke temp table gejalaInput --
+        INSERT INTO tblGejala (gejala, idPemeriksa) VALUES (gejalaInput, idPemeriksaanInput);
+        
+        -- join tblGejala dengan tabel Gejala, terdiriDari(relasi gejala dgn penyakit), Penyakit
+        SELECT DISTINCT penyakit.namaPenyakit
+        FROM tblGejala INNER JOIN gejala ON tblGejala.gejala = gejala.namaGejala 
+        INNER JOIN terdiridari ON gejala.idGejala = terdiridari.idGejala 
+        INNER JOIN penyakit ON terdiridari.idPenyakit = penyakit.idPenyakit;
+        
+        DROP TEMPORARY TABLE tblGejala;
+        
+        
+      
+       
+
+    
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `telinga` (`gejalaInput` VARCHAR(100), `idPemeriksaanInput` INT)  BEGIN
+		DECLARE jumlahGejala INT;
+ -- tabel untuk menampung gejala yang dipilih dr choice box --
+		CREATE TEMPORARY TABLE IF NOT EXISTS tblTelinga
+		(	gejala VARCHAR(50),
+			idPemeriksa INT
+        );
+        
+        
+        -- insert gejala dr choice box ke temp table gejalaInput --
+        INSERT INTO tblTelinga (gejala, idPemeriksa) VALUES (gejalaInput, idPemeriksaanInput);
+        
+		-- masukkan idGejala, idPemeriksaan ke tabel tercatat--
+		INSERT INTO tercatat (idGejala, idPemeriksaan)
+        SELECT idGejala, idPemeriksa
+        FROM tblTelinga INNER JOIN gejala ON tblTelinga.gejala = gejala.namaGejala;
+      
+        
+        -- join tabel tblTelinga dengan tabel gejala --
+        
+        -- cek jika sudah memenuhi syarat -- 
+        SELECT COUNT(gejala) INTO jumlahGejala FROM tblTelinga;
+        
+        IF jumlahGejala=1 THEN
+			SELECT DISTINCT penyakit.namaPenyakit
+			FROM tblTelinga INNER JOIN gejala ON tblTelinga.gejala = gejala.namaGejala 
+			INNER JOIN terdiridari ON gejala.idGejala = terdiridari.idGejala 
+			INNER JOIN penyakit ON terdiridari.idPenyakit = penyakit.idPenyakit;
+        END IF;
+        IF jumlahGejala = 2 THEN 
+			SELECT DISTINCT penyakit.namaPenyakit
+			FROM tblTelinga INNER JOIN gejala ON tblTelinga.gejala = gejala.namaGejala 
+			INNER JOIN terdiridari ON gejala.idGejala = terdiridari.idGejala 
+			INNER JOIN penyakit ON terdiridari.idPenyakit = penyakit.idPenyakit;
+		END IF;
+        
+
+END$$
 
 DELIMITER ;
 
@@ -92,7 +208,7 @@ INSERT INTO `gejala` (`idGejala`, `namaGejala`) VALUES
 (19, 'Tidak ada nanah keluar dari telinga'),
 (20, 'Telapak tangan sangat pucat'),
 (21, 'Telapak tangan agak pucat'),
-(22, 'Tidak ditemukan tanda kepucatan pada telapak tangan');
+(22, 'Telapak tangan tidak pucat');
 
 -- --------------------------------------------------------
 
@@ -184,7 +300,8 @@ CREATE TABLE `pasien` (
 INSERT INTO `pasien` (`idPasien`, `namaPasien`, `alamat`, `tanggalLahir`, `noTelp`) VALUES
 (1, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131'),
 (2, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131'),
-(3, 'Gio', 'Jl.OBC', '2017-01-01', '02174779');
+(3, 'Gio', 'Jl.OBC', '2017-01-01', '02174779'),
+(4, 'Moti', 'Taman Holis Indah E5-27', '1994-09-14', '0895357016018');
 
 -- --------------------------------------------------------
 
@@ -205,7 +322,8 @@ CREATE TABLE `pemeriksaan` (
 
 INSERT INTO `pemeriksaan` (`idPemeriksaan`, `idDokter`, `waktu`, `idPasien`) VALUES
 (42, 1, '2019-05-08', 1),
-(43, 1, '2019-05-08', 1);
+(43, 1, '2019-05-08', 1),
+(44, 3, '2019-05-13', 4);
 
 -- --------------------------------------------------------
 
@@ -215,25 +333,26 @@ INSERT INTO `pemeriksaan` (`idPemeriksaan`, `idDokter`, `waktu`, `idPasien`) VAL
 
 CREATE TABLE `penyakit` (
   `idPenyakit` int(11) NOT NULL,
-  `namaPenyakit` varchar(50) NOT NULL
+  `namaPenyakit` varchar(50) NOT NULL,
+  `syarat_minimal` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `penyakit`
 --
 
-INSERT INTO `penyakit` (`idPenyakit`, `namaPenyakit`) VALUES
-(1, 'Penyakit Sangat Berat'),
-(2, 'Pneumonia Berat'),
-(3, 'Pneumonia'),
-(4, 'Batuk bukan Pneumonia'),
-(5, 'Mastoiditis'),
-(6, 'Infeksi telinga akut'),
-(7, 'Infeksi'),
-(8, 'Tidak ada infeksi telinga'),
-(9, 'Anemia Berat'),
-(10, 'Anemia'),
-(11, 'Tidak Anemia');
+INSERT INTO `penyakit` (`idPenyakit`, `namaPenyakit`, `syarat_minimal`) VALUES
+(1, 'Penyakit Sangat Berat', 1),
+(2, 'Pneumonia Berat', 1),
+(3, 'Pneumonia', 1),
+(4, 'Batuk bukan Pneumonia', 1),
+(5, 'Mastoiditis', 1),
+(6, 'Infeksi telinga akut', 1),
+(7, 'Infeksi', 1),
+(8, 'Tidak ada infeksi telinga', 2),
+(9, 'Anemia Berat', 1),
+(10, 'Anemia', 1),
+(11, 'Tidak Anemia', 1);
 
 -- --------------------------------------------------------
 
@@ -254,8 +373,128 @@ CREATE TABLE `punya` (
 
 CREATE TABLE `tercatat` (
   `idGejala` int(11) NOT NULL,
-  `idPemeriksaann` int(11) NOT NULL
+  `idPemeriksaan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tercatat`
+--
+
+INSERT INTO `tercatat` (`idGejala`, `idPemeriksaan`) VALUES
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(6, 42),
+(7, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(6, 42),
+(7, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(6, 42),
+(7, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(6, 42),
+(7, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(4, 42),
+(20, 43),
+(20, 43),
+(21, 43),
+(20, 43),
+(21, 43),
+(20, 43),
+(21, 43),
+(20, 43),
+(21, 43),
+(20, 43),
+(21, 43),
+(22, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(13, 43),
+(18, 43),
+(18, 43),
+(18, 43),
+(19, 43),
+(18, 43),
+(19, 43),
+(14, 43),
+(18, 43),
+(19, 43),
+(11, 43),
+(10, 43),
+(11, 43),
+(10, 43),
+(10, 43),
+(11, 43),
+(10, 43);
 
 -- --------------------------------------------------------
 
@@ -403,7 +642,7 @@ ALTER TABLE `punya`
 -- Indexes for table `tercatat`
 --
 ALTER TABLE `tercatat`
-  ADD KEY `idPemeriksaann` (`idPemeriksaann`),
+  ADD KEY `idPemeriksaann` (`idPemeriksaan`),
   ADD KEY `tercatat_ibfk_2` (`idGejala`);
 
 --
@@ -433,31 +672,31 @@ ALTER TABLE `dokter`
 -- AUTO_INCREMENT for table `gejala`
 --
 ALTER TABLE `gejala`
-  MODIFY `idGejala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `idGejala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `obat`
 --
 ALTER TABLE `obat`
-  MODIFY `idObat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idObat` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `idPasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idPasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pemeriksaan`
 --
 ALTER TABLE `pemeriksaan`
-  MODIFY `idPemeriksaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `idPemeriksaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `penyakit`
 --
 ALTER TABLE `penyakit`
-  MODIFY `idPenyakit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `idPenyakit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tindakan`
@@ -495,7 +734,7 @@ ALTER TABLE `punya`
 --
 ALTER TABLE `tercatat`
   ADD CONSTRAINT `tercatat_ibfk_2` FOREIGN KEY (`idGejala`) REFERENCES `gejala` (`idGejala`),
-  ADD CONSTRAINT `tercatat_ibfk_3` FOREIGN KEY (`idPemeriksaann`) REFERENCES `pemeriksaan` (`idPemeriksaan`);
+  ADD CONSTRAINT `tercatat_ibfk_3` FOREIGN KEY (`idPemeriksaan`) REFERENCES `pemeriksaan` (`idPemeriksaan`);
 
 --
 -- Constraints for table `terdiridari`

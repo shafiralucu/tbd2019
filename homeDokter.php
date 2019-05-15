@@ -1,6 +1,7 @@
 <?php 
     session_start();
-    $emailDokter = $_SESSION['email'];
+    // $_SESSION['email'];
+    //  $_SESSION['idDokter'];
 
 ?>
 <!DOCTYPE html>
@@ -96,7 +97,7 @@
             </div>
                   
                   <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id = "navbarId">
-                    <a class="navbar-brand" href="#">Home</a>
+                    <a class="navbar-brand" href="homeDokter.php">Home</a>
                     <ul class="navbar-nav">
                       <li class="nav-item">
                         <a class="nav-link" href="#">List Pasien</a>
@@ -105,14 +106,14 @@
                         <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
                       </li>
                       <li class="nav-item" style="margin-left: 1450px;">
-                            <a class="nav-link" href="#">Logout</a>
+                            <a class="nav-link" href="loginDokter.php"><?php session_destroy();?>Logout</a>
                         </li>
                     </ul>
                   </nav>
                 
                   <div class="w3-container"><br>
                     <h2>
-                        Welcome, <?php $_SESSION['namaDokter']; ?> <?php echo $_SESSION['email']; ?>
+                        Welcome, <?php echo $_SESSION['namaDokter'];  ?> ( <?php echo $_SESSION['email']; ?> )
                     </h2>
                     <div class = "w3-container w3-display-middle" id = "boxCekDiagnosis" style = "width: 30%; margin-top: 3%;">
                         <center style = "font-family: font2;">
