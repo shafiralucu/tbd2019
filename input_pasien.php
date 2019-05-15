@@ -232,7 +232,7 @@
 
     <div class="w3-container"><br>
         <h2>
-            Welcome,  <?php echo $_SESSION['email'] ?>
+            Welcome,  <?php echo $_SESSION['namaDokter'];  ?> ( <?php echo $_SESSION['email']; ?> )
         </h2>
 
         <!-- isi data pasien -->

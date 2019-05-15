@@ -42,7 +42,21 @@ $emailDokter = $_SESSION['email'];
 			  $q = "INSERT INTO pemeriksaan (idDokter, waktu, idPasien) VALUES ('$resIdDokter', '$my_date' , '$resIdPasien')";
 			  
 			  $resFinal = $conn->query($q); 
-			  header('Location: tandaBahayaUmum.php');
+
+			  $query4 ="SELECT idPemeriksaan FROM pemeriksaan WHERE idPasien = '$resIdPasien' AND idDokter= '$resIdDokter'";
+
+			  $res4 = $conn->query($query4);
+			  $row4 = mysqli_fetch_row($res4); 
+			  $_SESSION['idPemeriksaan'] = $row4[0];
+			  $_SESSION['namaPasien'] = $nama;
+			  $_SESSION['alamat'] = $alamat;
+			  $_SESSION['tl'] = $tl;
+			  $_SESSION['notelp'] = $notelp;
+
+
+			//   echo  $_SESSION['idPemeriksaan'];
+
+			 header('Location: tandaBahayaUmum.php');
 
 				
 			}

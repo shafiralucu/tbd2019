@@ -1,29 +1,13 @@
-<?php
-session_start();
-include("koneksi.php");
-$listTandaBahayaUmum = "";
-$idDokter = $_SESSION['idDokter'];
-$idPemeriksaan = $_SESSION['idPemeriksaan'];
-$hasilPenyakit = "";
-if (isset($_POST['selanjutnya'])) {
-    $choices = $_POST['check_list'];
-            if (sizeof ($choices) > 0 ) {
-                for ($i=0; $i<sizeof ($choices);$i++) { 
-                    $listTandaBahayaUmum = $choices[$i];
-                    $query = "CALL tandaBahaya ('$listTandaBahayaUmum', '$idPemeriksaan')";
-                    $res = $conn->query($query);
-                    $row = mysqli_fetch_row($res);
-                    $hasilPenyakit = $row[0];
-                }
-            $_SESSION['hasilPenyakit'] = $hasilPenyakit;
-            } 
-            header("Location: batuk.php");
-}
+<?php 
+     include ("koneksi.php");
+    session_start();
 ?>
+
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Pemeriksaan 1 - Diagnosis Sederhana</title>
+    <title>Isi Data Pasien - Diagnosis Sederhana</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -31,7 +15,6 @@ if (isset($_POST['selanjutnya'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -157,7 +140,6 @@ if (isset($_POST['selanjutnya'])) {
             padding-left: 30px;
             padding-bottom: 30px;
             border-radius: 20px;
-
         }
 
         #navbarId {
@@ -194,69 +176,34 @@ if (isset($_POST['selanjutnya'])) {
             outline: none;
         }
 
-        /* The container */
-        .container {
-            display: block;
-            position: relative;
-            padding-left: 35px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            font-size: 22px;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
 
-        /* Hide the browser's default radio button */
-        .container input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
+        [type="date"] {
+            background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
         }
-
-        /* Create a custom radio button */
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 25px;
-            width: 25px;
-            background-color: #eee;
-            border-radius: 50%;
-        }
-
-        /* On mouse-over, add a grey background color */
-        .container:hover input~.checkmark {
-            background-color: #ccc;
-        }
-
-        /* When the radio button is checked, add a blue background */
-        .container input:checked~.checkmark {
-            background-color: #2196F3;
-        }
-
-        /* Create the indicator (the dot/circle - hidden when not checked) */
-        .checkmark:after {
-            content: "";
-            position: absolute;
+        [type="date"]::-webkit-inner-spin-button {
             display: none;
         }
+        [type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+        }
 
-        /* Show the indicator (dot/circle) when checked */
-        .container input:checked~.checkmark:after {
+        /* custom styles */
+        /* body {
+            padding: 4em;
+            background: #e5e5e5; */
+            /* font: 13px/1.4 Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif; */
+        /* }
+        label {
             display: block;
         }
-
-        /* Style the indicator (dot/circle) */
-        .container .checkmark:after {
-            top: 9px;
-            left: 9px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: white;
-        }
+        input {
+            border: 1px solid #c4c4c4;
+            border-radius: 5px;
+            background-color: #fff;
+            padding: 3px 5px;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+            width: 190px;
+        } */
     </style>
 
 
@@ -270,10 +217,10 @@ if (isset($_POST['selanjutnya'])) {
     </div>
 
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id="navbarId">
-        <a class="navbar-brand" href="#">Home</a>
+        <a class="navbar-brand" href="homeDokter.php">Home</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">List Pasien</a>
+        <li class="nav-item">
+                <a class="nav-link" href="listpasien.php">List Pasien</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
@@ -281,7 +228,7 @@ if (isset($_POST['selanjutnya'])) {
             <li class="nav-item">
                 <a class="nav-link" href="medHistory.php">Medical History</a>
             </li>
-            <li class="nav-item" style="margin-left: 1650px;">
+            <li class="nav-item" style="margin-left: 1450px;">
                 <a class="nav-link" href="#">Logout</a>
             </li>
         </ul>
@@ -289,29 +236,17 @@ if (isset($_POST['selanjutnya'])) {
 
     <div class="w3-container"><br>
         <h2>
-            Welcome, Dr. <?php echo $_SESSION['namaDokter']; ?> (<?php echo $_SESSION['email']; ?>)
-        </h2>
+             Welcome, <?php echo $_SESSION['namaDokter'];  ?> ( <?php echo $_SESSION['email']; ?> )
+         </h2>
+    </div>
+        
+    <div class="w3-show w3-content" id="chartContainer" style="height: 370px; width: 100%; margin-top:2%;"></div>
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"> </script>
 
-        <!-- isi data pasien -->
-		<form method="POST" action="tandaBahayaUmum.php">
-        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%;  font-family: font2; font-size: 18px;">
-            <center> <h1>Memeriksa Tanda Bahaya Umum </h1> </center>
-            <br>
-            <input type="checkbox" name="check_list[]" value="Tidak bisa minum atau menyusui">Tidak bisa minum atau menyusui<br>
-            <input type="checkbox" name="check_list[]" value="Memuntahkan semua makanan dan / atau minuman">Memuntahkan semua makanan dan / atau minuman<br>
-            <input type="checkbox" name="check_list[]" value="Pernah atau sedang mengalami kejang">Pernah atau sedang mengalami kejang<br>
-            <input type="checkbox" name="check_list[]" value="Gelisah">Gelisah<br>
-            <input type="checkbox" name="check_list[]" value="Letargis atau tidak sadar">Letargis atau tidak sadar<br>
-            <input type="checkbox" name="check_list[]" value="Tampak biru (sianosis)">Tampak biru (sianosis)<br>
-            <input type="checkbox" name="check_list[]" value="Ujung tangan dan kaki pucat dan dingin">Ujung tangan dan kaki pucat dan dingin<br>      
-                <br>
-               <center><button type="submit" name="selanjutnya" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button>
-            </center>
-        </div>
-</form>
         <div class="footer">
             <p style="margin-top: 1%;"> © 2019 Diagnosis Sederhana - Tugas Akhir TBD</p>
         </div>
+    
 
         <script>
         </script>
@@ -319,4 +254,48 @@ if (isset($_POST['selanjutnya'])) {
 
 </html>
 
-</script>
+<?php
+        //histogram4
+        $sql_histo4 = "SELECT * FROM tercatat";
+        $hasil_histo4 = mysqli_query($conn,$sql_histo4);
+        $hasil = [];
+        while($row = mysqli_fetch_array($hasil_histo4,MYSQLI_NUM)){
+            $hasil[] = $row;
+
+        }
+    ?>
+
+    <script type="text/javascript">
+        
+
+        window.onload = function () {
+        
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light1", // "light2", "dark1", "dark2"
+            animationEnabled: false, // change to true		
+            title:{
+                text: "Gejala Yang Muncul"
+            },
+            data: [
+            {
+                // Change type to "bar", "area", "spline", "pie",etc.
+            
+                type: "column",
+                dataPoints: <?= json_encode(array_values(array_map(function($data) {
+                    return [
+                        "label" => $data[0],
+                        "y"=> $data[1]
+                    ];
+                }, $hasil)));?>
+                
+            }
+            ]
+        });
+       
+       
+        chart.render();
+        
+        }
+    </script>
+    
+    

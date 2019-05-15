@@ -1,29 +1,14 @@
 <?php
-session_start();
-include("koneksi.php");
-$listTandaBahayaUmum = "";
-$idDokter = $_SESSION['idDokter'];
-$idPemeriksaan = $_SESSION['idPemeriksaan'];
-$hasilPenyakit = "";
-if (isset($_POST['selanjutnya'])) {
-    $choices = $_POST['check_list'];
-            if (sizeof ($choices) > 0 ) {
-                for ($i=0; $i<sizeof ($choices);$i++) { 
-                    $listTandaBahayaUmum = $choices[$i];
-                    $query = "CALL tandaBahaya ('$listTandaBahayaUmum', '$idPemeriksaan')";
-                    $res = $conn->query($query);
-                    $row = mysqli_fetch_row($res);
-                    $hasilPenyakit = $row[0];
-                }
-            $_SESSION['hasilPenyakit'] = $hasilPenyakit;
-            } 
-            header("Location: batuk.php");
-}
-?>
+    session_start();
+    include("koneksi.php");
+    $query = "SELECT * FROM Pasien";
+    $result = $conn->query($query);
+ ?>
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Pemeriksaan 1 - Diagnosis Sederhana</title>
+    <title>Hasil Pemeriksaan - Diagnosis Sederhana</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -32,9 +17,6 @@ if (isset($_POST['selanjutnya'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     <style>
         .w3-theme-l5 {
@@ -157,7 +139,6 @@ if (isset($_POST['selanjutnya'])) {
             padding-left: 30px;
             padding-bottom: 30px;
             border-radius: 20px;
-
         }
 
         #navbarId {
@@ -270,10 +251,10 @@ if (isset($_POST['selanjutnya'])) {
     </div>
 
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id="navbarId">
-        <a class="navbar-brand" href="#">Home</a>
+        <a class="navbar-brand" href="homeDokter.php">Home</a>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="#">List Pasien</a>
+                <a class="nav-link" href="listpasien.php">List Pasien</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
@@ -281,42 +262,48 @@ if (isset($_POST['selanjutnya'])) {
             <li class="nav-item">
                 <a class="nav-link" href="medHistory.php">Medical History</a>
             </li>
-            <li class="nav-item" style="margin-left: 1650px;">
-                <a class="nav-link" href="#">Logout</a>
+            <li class="nav-item" style="margin-left: 1450px;">
+                <a class="nav-link" href="logout.php">Logout</a>
             </li>
         </ul>
     </nav>
 
     <div class="w3-container"><br>
         <h2>
-            Welcome, Dr. <?php echo $_SESSION['namaDokter']; ?> (<?php echo $_SESSION['email']; ?>)
+        Welcome, Dr. <?php echo $_SESSION['namaDokter']; ?> (<?php echo $_SESSION['email']; ?>)
         </h2>
 
         <!-- isi data pasien -->
-		<form method="POST" action="tandaBahayaUmum.php">
-        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%;  font-family: font2; font-size: 18px;">
-            <center> <h1>Memeriksa Tanda Bahaya Umum </h1> </center>
-            <br>
-            <input type="checkbox" name="check_list[]" value="Tidak bisa minum atau menyusui">Tidak bisa minum atau menyusui<br>
-            <input type="checkbox" name="check_list[]" value="Memuntahkan semua makanan dan / atau minuman">Memuntahkan semua makanan dan / atau minuman<br>
-            <input type="checkbox" name="check_list[]" value="Pernah atau sedang mengalami kejang">Pernah atau sedang mengalami kejang<br>
-            <input type="checkbox" name="check_list[]" value="Gelisah">Gelisah<br>
-            <input type="checkbox" name="check_list[]" value="Letargis atau tidak sadar">Letargis atau tidak sadar<br>
-            <input type="checkbox" name="check_list[]" value="Tampak biru (sianosis)">Tampak biru (sianosis)<br>
-            <input type="checkbox" name="check_list[]" value="Ujung tangan dan kaki pucat dan dingin">Ujung tangan dan kaki pucat dan dingin<br>      
-                <br>
-               <center><button type="submit" name="selanjutnya" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button>
-            </center>
+        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 50%; margin-top: 5%; padding-bottom:2%; font-family: font2; font-size: 18px;">
+        <table class="w3-table w3-bordered w3-center">
+            <tr >
+                    <th>Id Pasien</th>
+                    <th>Nama Pasien</th>
+                    <th>Alamat</th>
+                    <th>Tanggal Lahir</th>
+                    <th>No. Telepon</th>
+            </tr>
+                <?php 
+                    foreach ($result as $key => $row) {
+                        echo "<tr>";
+                        echo "<td>".$row['idPasien']."</td>";
+                        echo "<td>".$row['namaPasien']."</td>";
+                        echo "<td>".$row['alamat']."</td>";
+                        echo "<td>".$row['tanggalLahir']."</td>";
+                        echo "<td>".$row['noTelp']."</td>";
+                        echo "</tr>";
+                    }
+                
+                ?>
+    </table>
+
+
         </div>
-</form>
+
         <div class="footer">
             <p style="margin-top: 1%;"> © 2019 Diagnosis Sederhana - Tugas Akhir TBD</p>
         </div>
 
-        <script>
-        </script>
 </body>
 
 </html>
-
-</script>

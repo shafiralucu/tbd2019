@@ -1,3 +1,24 @@
+<?php
+session_start();
+include("koneksi.php");
+$listTandaBahayaUmum = "";
+$idDokter = $_SESSION['idDokter'];
+$idPemeriksaan = $_SESSION['idPemeriksaan'];
+$hasilPenyakit4 = "";
+if (isset($_POST['selanjutnya'])) {
+    $choices = $_POST['check_list'];
+            if (sizeof ($choices) > 0 ) {
+                for ($i=0; $i<sizeof ($choices);$i++) { 
+                    $listTandaBahayaUmum = $choices[$i];
+                    $query = "CALL anemia ('$listTandaBahayaUmum', '$idPemeriksaan')";
+                    $res = $conn->query($query);
+                    $row = mysqli_fetch_row($res);
+                    $hasilPenyakit4 = $row[0];
+                }
+            $_SESSION['hasilPenyakit4'] = $hasilPenyakit4;
+            } 
+            header ("Location: hasilPemeriksaan.php");
+} ?>
 <!DOCTYPE html>
 <html>
 
@@ -247,11 +268,14 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id="navbarId">
         <a class="navbar-brand" href="#">Home</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">List Pasien</a>
+        <li class="nav-item">
+                <a class="nav-link" href="listpasien.php">List Pasien</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="medHistory.php">Medical History</a>
             </li>
             <li class="nav-item" style="margin-left: 1450px;">
                 <a class="nav-link" href="#">Logout</a>
@@ -261,36 +285,29 @@
 
     <div class="w3-container"><br>
         <h2>
-            Welcome, Dr. Firzan! (firzanviolant@gmail.com)
+        Welcome, Dr. <?php echo $_SESSION['namaDokter']; ?> (<?php echo $_SESSION['email']; ?>)
         </h2>
 
         <!-- isi data pasien -->
-        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 4%;">
-            <center style="font-family: font2;"">
-                <h1 style = " text-align: center;">Memeriksa Anemia</h1>
-                <hr>
-                <label class="container" style="font-family: font2; text-align: left;">Sangat Pucat
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; font-size: 20px; text-align: left;">Agak Pucat
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;">Tidak Pucat
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <button type="button" class="btn btn-primary w3-theme-d4">Selanjutnya</button>
+        <form method="POST" action="anemia.php">
+        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%; font-family: font2; font-size: 18px;">
+            <center> <h1>Memeriksa Anemia</h1> </center>
+            <br>
+            <input type="checkbox" name="check_list[]" value="Telapak tangan sangat pucat">Telapak tangan sangat pucat<br>
+            <input type="checkbox" name="check_list[]" value="Telapak tangan agak pucat">Telapak tangan agak pucat<br>
+            <input type="checkbox" name="check_list[]" value="Telapak tangan tidak pucat">Telapak tangan tidak pucat<br>
+                <br>
+               <center> <button type="submit" name="selanjutnya" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button>
             </center>
+            <br>
+        </div>
+        </form>
         </div>
 
         <div class="footer">
             <p style="margin-top: 1%;"> © 2019 Diagnosis Sederhana - Tugas Akhir TBD</p>
         </div>
 
-        <script>
-        </script>
 </body>
 
 </html>

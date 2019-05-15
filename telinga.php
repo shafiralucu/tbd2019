@@ -1,3 +1,26 @@
+<?php
+session_start();
+include("koneksi.php");
+$listTandaBahayaUmum = "";
+$idDokter = $_SESSION['idDokter'];
+$idPemeriksaan = $_SESSION['idPemeriksaan'];
+$hasilPenyakit3 = "";
+if (isset($_POST['selanjutnya'])) {
+    $choices = $_POST['check_list'];
+            if (sizeof ($choices) > 0 ) {
+                for ($i=0; $i<sizeof ($choices);$i++) { 
+                    $listTandaBahayaUmum = $choices[$i];
+                    $query = "CALL telinga ('$listTandaBahayaUmum', '$idPemeriksaan')";
+                    $res = $conn->query($query);
+                    $row = mysqli_fetch_row($res);
+                    $hasilPenyakit3 = $row[0];
+                }
+            $_SESSION['hasilPenyakit3'] = $hasilPenyakit3;
+            echo $_SESSION['hasilPenyakit3'];
+            }
+             header("Location: anemia.php");
+             } 
+ ?>
 <!DOCTYPE html>
 <html>
 
@@ -247,11 +270,14 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id="navbarId">
         <a class="navbar-brand" href="#">Home</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">List Pasien</a>
+        <li class="nav-item">
+                <a class="nav-link" href="listpasien.php">List Pasien</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="medHistory.php">Medical History</a>
             </li>
             <li class="nav-item" style="margin-left: 1450px;">
                 <a class="nav-link" href="#">Logout</a>
@@ -260,42 +286,26 @@
     </nav>
 
     <div class="w3-container"><br>
-        <h2>
-            Welcome, Dr. Firzan! (firzanviolant@gmail.com)
+        <h2>Welcome, Dr. <?php echo $_SESSION['namaDokter']; ?> (<?php echo $_SESSION['email']; ?>)
         </h2>
 
         <!-- isi data pasien -->
-        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 4%;">
-            <center style="font-family: font2;"">
-                <h1 style = " text-align: center;">Memeriksa Telinga</h1>
-                <hr>
-                <label class="container" style="font-family: font2; text-align: left;">Balita memiliki masalah telinga
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; font-size: 20px; text-align: left;">Nyeri di telinga
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;">Rasa penuh di telinga
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; font-size: 20px; text-align: left;">Bagian belakang
-                    telinga bengkak
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; font-size: 20px; text-align: left;">Cairan nanah di
-                    telinga
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label for="diare" style="font-family: font2; font-size: 20px; text-align: left;">Berapa lama (hari)
-                    :</label>
-                <input type="text" placeholder="Lama batuk" name="lama"> <br><br>
-                <button type="button" class="btn btn-primary w3-theme-d4">Selanjutnya</button>
-            </center>
+        
+        <form method="POST" action="telinga.php">
+        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%; font-family: font2; font-size: 18px;">
+            <center> <h1>Memeriksa Telinga</h1> </center> <br>
+            <input type="checkbox" name="check_list[]" value="Pembengkakan yang nyeri belakang telinga">Pembengkakan yang nyeri belakang telinga<br>
+            <input type="checkbox" name="check_list[]" value="Nyeri telinga">Nyeri telinga<br>
+            <input type="checkbox" name="check_list[]" value="Rasa penuh di telinga">Rasa penuh di telinga<br>
+            <input type="checkbox" name="check_list[]" value="Tampak cairan/nanah keluar dari telinga selama kurang dari 14 hari">Tampak cairan/nanah keluar dari telinga selama kurang dari 14 hari<br>
+            <input type="checkbox" name="check_list[]" value="Tampak cairan/nanah keluar dari telinga dan telah terjadi selama 14 hari atau lebih">Tampak cairan/nanah keluar dari telinga dan telah terjadi selama 14 hari atau lebih<br>
+            <input type="checkbox" name="check_list[]" value="Tidak ada nyeri telinga">Tidak ada nyeri telinga<br>
+            <input type="checkbox" name="check_list[]" value="Tidak ada nanah keluar dari telinga">Tidak ada nanah keluar dari telinga<br>      
+                <br>
+                <center><button type="submit" name="selanjutnya" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button>
+            </center> <br>
+        </div>
+        </form>
         </div>
 
         <div class="footer">

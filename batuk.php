@@ -1,3 +1,27 @@
+<?php
+session_start();
+include("koneksi.php");
+$listTandaBahayaUmum = "";
+$idDokter = $_SESSION['idDokter'];
+$idPemeriksaan = $_SESSION['idPemeriksaan'];
+$hasilPenyakit2 = "";
+if (isset($_POST['selanjutnya'])) {
+    $choices = $_POST['check_list'];
+            if (sizeof ($choices) > 0 ) {
+                for ($i=0; $i<sizeof ($choices);$i++) { 
+                    $listTandaBahayaUmum = $choices[$i];
+                    $query = "CALL batuk ('$listTandaBahayaUmum', '$idPemeriksaan')";
+                    $res = $conn->query($query);
+                    $row = mysqli_fetch_row($res);
+                    $hasilPenyakit2 = $row[0];
+            }
+            $_SESSION['hasilPenyakit2'] = $hasilPenyakit2;
+
+             }
+             header("Location: telinga.php");
+    } 
+
+ ?>
 <!DOCTYPE html>
 <html>
 
@@ -247,11 +271,14 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id="navbarId">
         <a class="navbar-brand" href="#">Home</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">List Pasien</a>
+        <li class="nav-item">
+                <a class="nav-link" href="listpasien.php">List Pasien</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="medHistory.php">Medical History</a>
             </li>
             <li class="nav-item" style="margin-left: 1450px;">
                 <a class="nav-link" href="#">Logout</a>
@@ -261,35 +288,22 @@
 
     <div class="w3-container"><br>
         <h2>
-            Welcome, Dr. Firzan! (firzanviolant@gmail.com)
+        Welcome, Dr. <?php echo $_SESSION['namaDokter']; ?> (<?php echo $_SESSION['email']; ?>)
         </h2>
 
-        <!-- isi data pasien -->
-        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 4%;">
-            <center style="font-family: font2;"">
-                <h1 style = "text-align: center;">Memeriksa Batuk atau Sukar Bernafas</h1>
-                <hr>
-                <label for="batuk" style="font-family: font2; font-size: 20px; text-align: left;">Berapa lama (hari) :</label>
-                <input type="text" placeholder="Lama batuk" name="lama"> <br>
-                <label for="batuk" style="font-family: font2; font-size: 20px; text-align: left;">Berapa kali permenit :</label>
-                <input type="text" placeholder="Jumlah batuk permenit" name="kali"> <br>
-                <label class="container" style="font-family: font2; font-size: 20px; text-align: left;">Ada tarikan dinding dada kedalam
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;" >Saturasi oksigen kurang dari 90
-                        <input type="checkbox" name="checkbox">
-                        <span class="checkmark"></span> 
-                </label>
-                <label class="container" style="font-family: font2; text-align: left;" >Lihat dan dengar adanya wheezing
-                    <input type="checkbox" name="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            
-                
-                <button type="button" class="btn btn-primary w3-theme-d4">Selanjutnya</button>
-            </center>
+    
+        <form method="POST" action="batuk.php">
+        <div class="w3-container w3-display-middle" id="boxCekDiagnosis" style="width: 30%; margin-top: 5%; padding-bottom:2%; font-family: font2; font-size: 18px;">
+   
+            <center> <h1>Memeriksa Batuk</h1> </center>
+            <input type="checkbox" name="check_list[]" value="Ada tarikan dinding dada kedalam">Ada tarikan dinding dada kedalam<br>
+            <input type="checkbox" name="check_list[]" value="Saturasi oksigen < 90%">Saturasi oksigen < 90%<br>
+            <input type="checkbox" name="check_list[]" value="Nafas cepat">Nafas cepat<br>
+            <input type="checkbox" name="check_list[]" value="Tidak ada tanda-tanda Pneumonia Berat maupun Pneumonia">Tidak ada tanda-tanda Pneumonia Berat maupun Pneumonia<br>
+                <br>
+                <center><button type="submit" name="selanjutnya" class="btn btn-primary w3-theme-d4 w3-xlarge">Selanjutnya</button></center>
         </div>
+        </form>
 
         <div class="footer">
             <p style="margin-top: 1%;"> © 2019 Diagnosis Sederhana - Tugas Akhir TBD</p>

@@ -99,21 +99,24 @@
                   <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top w3-theme-d4" id = "navbarId">
                     <a class="navbar-brand" href="homeDokter.php">Home</a>
                     <ul class="navbar-nav">
+                    <li class="nav-item">
+                <a class="nav-link" href="listpasien.php">List Pasien</a>
+            </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">List Pasien</a>
+                        <a class="nav-link" href="listpasien.php">Edit Penyakit & Gejala</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">Edit Penyakit & Gejala</a>
-                      </li>
+                        <a class="nav-link" href="medHistory.php">Medical History</a>
+                    </li>
                       <li class="nav-item" style="margin-left: 1450px;">
-                            <a class="nav-link" href="loginDokter.php"><?php session_destroy();?>Logout</a>
+                            <a class="nav-link" href="loginDokter.php">Logout</a>
                         </li>
                     </ul>
                   </nav>
                 
                   <div class="w3-container"><br>
                     <h2>
-                        Welcome, <?php echo $_SESSION['namaDokter'];  ?> ( <?php echo $_SESSION['email']; ?> )
+                        Welcome, <?php echo $_SESSION['namaDokter'];?> ( <?php echo $_SESSION['email']; ?> )
                     </h2>
                     <div class = "w3-container w3-display-middle" id = "boxCekDiagnosis" style = "width: 30%; margin-top: 3%;">
                         <center style = "font-family: font2;">

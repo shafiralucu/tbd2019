@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2019 at 02:03 PM
+-- Generation Time: May 15, 2019 at 05:24 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -81,6 +81,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `batuk` (`gejalaInput` VARCHAR(100),
         
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `medHisto4` ()  BEGIN
+CREATE TEMPORARY TABLE tblHisto4(
+	namaGejala varchar(50),
+	jumlahGejala int
+);
+INSERT INTO tblHisto4
+
+select namaGejala , count(gejala.idGejala) as 'jumlah gejala'
+from tercatat join gejala on tercatat.idGejala =Gejala.idGejala
+group by namagejala ,gejala.idGejala;
+
+select *
+from tblHisto4;
+
+
+call medHisto4;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tandaBahaya` (`gejalaInput` VARCHAR(100), `idPemeriksaanInput` INT)  BEGIN
 	 -- tabel untuk menampung gejala yang dipilih dr choice box --
 		CREATE TEMPORARY TABLE IF NOT EXISTS tblGejala
@@ -91,19 +109,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tandaBahaya` (`gejalaInput` VARCHAR
         -- insert gejala dr choice box ke temp table gejalaInput --
         INSERT INTO tblGejala (gejala, idPemeriksa) VALUES (gejalaInput, idPemeriksaanInput);
         
+		-- masukkan idGejala, idPemeriksaan ke tabel tercatat--
+		INSERT INTO tercatat (idGejala, idPemeriksaan)
+        SELECT idGejala, idPemeriksa
+        FROM tblGejala INNER JOIN gejala ON tblGejala.gejala = gejala.namaGejala
+        WHERE tblGejala.gejala = gejala.namaGejala;
+        
         -- join tblGejala dengan tabel Gejala, terdiriDari(relasi gejala dgn penyakit), Penyakit
         SELECT DISTINCT penyakit.namaPenyakit
         FROM tblGejala INNER JOIN gejala ON tblGejala.gejala = gejala.namaGejala 
         INNER JOIN terdiridari ON gejala.idGejala = terdiridari.idGejala 
         INNER JOIN penyakit ON terdiridari.idPenyakit = penyakit.idPenyakit;
         
-        DROP TEMPORARY TABLE tblGejala;
-        
-        
-      
-       
 
-    
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `telinga` (`gejalaInput` VARCHAR(100), `idPemeriksaanInput` INT)  BEGIN
@@ -299,9 +317,17 @@ CREATE TABLE `pasien` (
 
 INSERT INTO `pasien` (`idPasien`, `namaPasien`, `alamat`, `tanggalLahir`, `noTelp`) VALUES
 (1, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131'),
-(2, 'Naufal', 'Jl. ABC', '2019-05-07', '1231232131'),
 (3, 'Gio', 'Jl.OBC', '2017-01-01', '02174779'),
-(4, 'Moti', 'Taman Holis Indah E5-27', '1994-09-14', '0895357016018');
+(4, 'Moti', 'Taman Holis Indah E5-27', '1994-09-14', '0895357016018'),
+(5, 'Naofal', 'Jl. OBC', '2015-12-28', '087745668123'),
+(6, 'Gopal', 'Jl. OBC', '2015-12-28', '087745668123'),
+(7, 'Shafira', 'Jl. Ciumbuleuit', '2019-04-30', '087745668123'),
+(13, 'Khadaffa', 'Jl. ABC', '2019-05-06', '0895357016018'),
+(14, 'Alif', 'Jl. OBC', '2019-05-01', '0217565957'),
+(15, 'Hashrul', 'Jl. Rancabentang 10A', '2019-05-22', '087743553397'),
+(18, 'Shafira', 'Jl. Ciumbuleuit', '2019-05-05', '087745668123'),
+(19, 'Khadaffa', 'Jl. Ciumbuleuit', '2019-05-13', '087743553397'),
+(20, 'Arru', 'Jl. Dago', '2019-05-22', '087745668123');
 
 -- --------------------------------------------------------
 
@@ -323,7 +349,20 @@ CREATE TABLE `pemeriksaan` (
 INSERT INTO `pemeriksaan` (`idPemeriksaan`, `idDokter`, `waktu`, `idPasien`) VALUES
 (42, 1, '2019-05-08', 1),
 (43, 1, '2019-05-08', 1),
-(44, 3, '2019-05-13', 4);
+(44, 3, '2019-05-13', 4),
+(45, 1, '2019-05-15', 5),
+(46, 1, '2019-05-15', 6),
+(50, 1, '2019-05-15', 8),
+(51, 1, '2019-05-15', 11),
+(52, 1, '2019-05-15', 11),
+(53, 1, '2019-05-15', 13),
+(54, 1, '2019-05-15', 14),
+(55, 3, '2019-05-15', 15),
+(56, 3, '2019-05-15', 16),
+(57, 3, '2019-05-15', 17),
+(58, 3, '2019-05-15', 7),
+(59, 3, '2019-05-15', 13),
+(60, 1, '2019-05-15', 20);
 
 -- --------------------------------------------------------
 
@@ -494,7 +533,90 @@ INSERT INTO `tercatat` (`idGejala`, `idPemeriksaan`) VALUES
 (10, 43),
 (10, 43),
 (11, 43),
-(10, 43);
+(10, 43),
+(10, 43),
+(10, 43),
+(4, 43),
+(4, 43),
+(4, 46),
+(4, 51),
+(8, 51),
+(8, 51),
+(8, 51),
+(8, 51),
+(8, 51),
+(1, 51),
+(1, 51),
+(4, 51),
+(4, 51),
+(1, 51),
+(1, 51),
+(1, 51),
+(7, 51),
+(7, 51),
+(10, 43),
+(10, 51),
+(10, 51),
+(10, 51),
+(10, 46),
+(10, 51),
+(10, 51),
+(10, 51),
+(10, 46),
+(10, 46),
+(10, 51),
+(10, 51),
+(10, 51),
+(10, 46),
+(10, 46),
+(10, 51),
+(11, 51),
+(9, 51),
+(9, 51),
+(9, 51),
+(13, 51),
+(13, 51),
+(20, 51),
+(20, 51),
+(20, 46),
+(20, 51),
+(20, 51),
+(20, 51),
+(1, 53),
+(9, 53),
+(13, 53),
+(22, 53),
+(1, 54),
+(9, 54),
+(13, 54),
+(20, 54),
+(1, 55),
+(19, 55),
+(22, 55),
+(1, 56),
+(10, 56),
+(15, 56),
+(20, 56),
+(10, 46),
+(10, 46),
+(10, 46),
+(10, 46),
+(10, 46),
+(10, 46),
+(4, 57),
+(20, 57),
+(1, 58),
+(9, 58),
+(13, 58),
+(20, 58),
+(4, 59),
+(11, 59),
+(18, 59),
+(22, 59),
+(1, 60),
+(9, 60),
+(13, 60),
+(20, 60);
 
 -- --------------------------------------------------------
 
@@ -684,13 +806,13 @@ ALTER TABLE `obat`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `idPasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idPasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `pemeriksaan`
 --
 ALTER TABLE `pemeriksaan`
-  MODIFY `idPemeriksaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `idPemeriksaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `penyakit`
